@@ -3,9 +3,9 @@ package main
 
 import (
 	"database/sql"
-
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"log"
@@ -49,7 +49,8 @@ func (a *App) initializeRoutes() {
 
 func (a *App) Run(addr string) {
 	fmt.Println("Running server!")
-	log.Fatal(http.ListenAndServe(":11205", a.Router))
+	corsObj := handlers.AllowedOrigins([]string{"*"})
+	log.Fatal(http.ListenAndServe(":11203", handlers.CORS(corsObj)(a.Router)))
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {

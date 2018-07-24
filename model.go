@@ -95,7 +95,7 @@ func (p *combination) deleteCombination(db *sql.DB) error {
 func (p *combination) createCombination(db *sql.DB) error {
 	err := db.QueryRow("INSERT INTO combination(DrugA, DrugB, CellLine, Source, DSS, Synergy_HSA) VALUES($1, $2, $3, $4, $5, $6) RETURNING id", p.DrugA, p.DrugB, p.CellLine, p.Source, p.DSS, p.Synergy_HSA).Scan(&p.ID)
 	if err != nil {
-		return nil
+		return err
 	}
 	return nil
 }
