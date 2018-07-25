@@ -44,7 +44,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
 	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateCombination).Methods("PUT")
 	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
-	a.Router.HandleFunc("/dose/{id_combinations: [0-9]+}", a.getDose)
+	a.Router.HandleFunc("/doses/{id_combinations: [0-9]+}", a.getDosesByID).Methods("GET")
 	a.Router.HandleFunc("/healthcheck", a.healthCheck).Methods("GET")
 }
 
