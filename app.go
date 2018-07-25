@@ -95,8 +95,8 @@ func (a *App) getDoses(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
 
-	if count > 10 || count < 1 {
-		count = 10
+	if count > 100 || count < 1 {
+		count = 100
 	}
 	if start < 0 {
 		start = 0
