@@ -34,18 +34,28 @@ func (a *App) Initialize(user, password, dbname string) {
 }
 
 func (a *App) initializeRoutes() {
-	a.Router.HandleFunc("/doses", a.getDoses).Methods("GET")
-	a.Router.HandleFunc("/dose", a.createDose).Methods("POST")
+
+	//all GET
 	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.getDose).Methods("GET")
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateDose).Methods("PUT")
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteDose).Methods("DELETE")
-	a.Router.HandleFunc("/combinations", a.getCombinations).Methods("GET")
-	a.Router.HandleFunc("/combination", a.createCombination).Methods("POST")
-	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateCombination).Methods("PUT")
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
+	a.Router.HandleFunc("/doses", a.getDoses).Methods("GET")
 	a.Router.HandleFunc("/doses/{id:[0-9]+}", a.getDosesByID).Methods("GET")
+	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
+	a.Router.HandleFunc("/combinations", a.getCombinations).Methods("GET")
 	a.Router.HandleFunc("/healthcheck", a.healthCheck).Methods("GET")
+	a.Router.HandleFunc("/conditions", a.getConditions).Methods("GET")
+
+
+	//all POST
+	a.Router.HandleFunc("/dose", a.createDose).Methods("POST")
+	a.Router.HandleFunc("/combination", a.createCombination).Methods("POST")
+
+	//all GET
+	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteDose).Methods("DELETE")
+	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
+
+	//all PUT
+	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.updateCombination).Methods("PUT")
+	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateDose).Methods("PUT")
 }
 
 func (a *App) Run(addr string) {
@@ -74,7 +84,7 @@ func (a *App) getDose(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
@@ -82,7 +92,7 @@ func (a *App) getDose(w http.ResponseWriter, r *http.Request) {
 	if err := p.getDose(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:
-			respondWithError(w, http.StatusNotFound, "Product not found")
+			respondWithError(w, http.StatusNotFound, "Not found")
 		default:
 			respondWithError(w, http.StatusInternalServerError, err.Error())
 		}
@@ -150,14 +160,14 @@ func (a *App) updateDose(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
 	var p doses
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&p); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 	defer r.Body.Close()
@@ -175,7 +185,7 @@ func (a *App) deleteDose(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid Product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
@@ -192,7 +202,7 @@ func (a *App) getCombination(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
@@ -200,7 +210,7 @@ func (a *App) getCombination(w http.ResponseWriter, r *http.Request) {
 	if err := p.getCombination(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:
-			respondWithError(w, http.StatusNotFound, "Product not found")
+			respondWithError(w, http.StatusNotFound, "Not found")
 		default:
 			respondWithError(w, http.StatusInternalServerError, err.Error())
 		}
@@ -251,7 +261,7 @@ func (a *App) updateCombination(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
@@ -276,7 +286,7 @@ func (a *App) deleteCombination(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid Product ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid ID")
 		return
 	}
 
@@ -287,4 +297,24 @@ func (a *App) deleteCombination(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
+}
+
+func (a *App) getConditions(w http.ResponseWriter, r *http.Request) {
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+
+	if count > 10 || count < 1 {
+		count = 10
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	allConditions, err := getConditions(a.DB, start, count)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, allConditions)
 }

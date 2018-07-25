@@ -27,6 +27,32 @@ type combination struct {
 	Synergy_HSA float64 `json:"Synergy_HSA"`
 }
 
+//add number of cell lines tested
+// change add info about matrix comb
+type conditions struct {
+	ID		int		`json:"id"`
+	Source	string	`json:"Source"`
+		AssayDetails	struct {
+			Readout				string	`json:"Readout"`
+			Compound			string	`json:"Compound"`
+			ControlNegative		bool	`json:"ControlNegative"`
+			ControlPositive		bool	`json:"ControlPositive"`
+		}
+		NumberOfDrugs	struct {
+			Single				int		`json:"Single"`
+			DosesSingle			int		`json:"DosesSingle"`
+			Combination			int		`json:"Combination"`
+			DosesCombination	int		`json:"DosesCombination"`
+		}
+		Plate			struct {
+			Format			int		`json:"Format"`
+			CellsPerWell	int		`json:"CellsPerWell"`
+			VolumePerWell	int		`json:"VolumePerWell"`
+			Unit 			string	`json:"UnitVolume"`
+		}
+
+}
+
 func (p *doses) getDose(db *sql.DB) error {
 	return db.QueryRow("SELECT DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_HSA, CellLine, id_combinations FROM doses WHERE id=$1",
 		p.ID).Scan(&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_HSA, &p.CellLine, &p.IdCombinations)
@@ -56,28 +82,6 @@ func (p *doses) createDose(db *sql.DB) error {
 	return nil
 }
 
-func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
-	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_HSA, CellLine,id_combinations FROM doses WHERE id_combinations=$1",
-		idCombinations)
-
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	allDosesByID := []doses{}
-
-	for rows.Next() {
-		var p doses
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_HSA, &p.CellLine, &p.IdCombinations); err != nil {
-			return nil, err
-		}
-		allDosesByID = append(allDosesByID, p)
-	}
-	return allDosesByID, nil
-}
-
 func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 	rows, err := db.Query(
 		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_HSA, CellLine, id_combinations FROM doses LIMIT $1 OFFSET $2",
@@ -99,6 +103,28 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 		allDoses = append(allDoses, p)
 	}
 	return allDoses, nil
+}
+
+func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
+	rows, err := db.Query(
+		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_HSA, CellLine,id_combinations FROM doses WHERE id_combinations=$1",
+		idCombinations)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	allDosesByID := []doses{}
+
+	for rows.Next() {
+		var p doses
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_HSA, &p.CellLine, &p.IdCombinations); err != nil {
+			return nil, err
+		}
+		allDosesByID = append(allDosesByID, p)
+	}
+	return allDosesByID, nil
 }
 
 func (p *combination) getCombination(db *sql.DB) error {
@@ -146,3 +172,30 @@ func getCombinations(db *sql.DB, start, count int) ([]combination, error) {
 	}
 	return allCombinations, nil
 }
+
+
+func getConditions(db *sql.DB, start, count int) ([]conditions, error) {
+	rows, err := db.Query(
+		"SELECT ID, Source, Readout, Compound, ControlNegative, ControlPositive, Single, DosesSingle,Combination, DosesCombination,Format,CellsPerWell,VolumePerWell,Unit FROM conditions LIMIT $1 OFFSET $2",
+		count, start)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	allConditions := []conditions{}
+
+	for rows.Next() {
+		var p conditions
+		if err := rows.Scan(&p.ID, &p.Source, &p.AssayDetails.Readout, &p.AssayDetails.Compound, &p.AssayDetails.ControlNegative, &p.AssayDetails.ControlPositive,
+			&p.NumberOfDrugs.Single, &p.NumberOfDrugs.DosesSingle,&p.NumberOfDrugs.Combination,&p.NumberOfDrugs.DosesCombination, &p.Plate.Format, &p.Plate.CellsPerWell, &p.Plate.VolumePerWell, &p.Plate.Unit);
+			err != nil {
+				return nil, err
+			}
+		allConditions = append(allConditions, p)
+	}
+	return allConditions, nil
+}
+
