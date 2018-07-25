@@ -44,7 +44,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
 	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateCombination).Methods("PUT")
 	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
-	a.Router.HandleFunc("/doses/{id_combinations: [0-9]+}", a.getDosesByID).Methods("GET")
+	a.Router.HandleFunc("/doses/{id:[0-9]+}", a.getDosesByID).Methods("GET")
 	a.Router.HandleFunc("/healthcheck", a.healthCheck).Methods("GET")
 }
 
@@ -113,7 +113,7 @@ func (a *App) getDoses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getDosesByID(w http.ResponseWriter, r *http.Request) {
-	id_combinations, _ := strconv.Atoi(r.FormValue("id_combinations"))
+	id_combinations, _ := strconv.Atoi(r.FormValue("id"))
 
 
 	allDosesByID, err := getDosesByID(a.DB, id_combinations)
