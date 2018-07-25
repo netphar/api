@@ -5,16 +5,16 @@ import (
 )
 
 type doses struct {
-	ID          	int     `json:"id"`
-	DrugA       	string  `json:"DrugA"`
-	DrugB       	string  `json:"DrugB"`
-	DoseA       	float64 `json:"DoseA"`
-	DoseB       	float64 `json:"DoseB"`
-	Response    	float64 `json:"Response"`
-	DSS         	float64 `json:"DSS"`
-	Synergy_HSA 	float64 `json:"Synergy_HSA"`
-	CellLine    	string  `json:"CellLine"`
-	id_combinations	int		`json:"id_combinations"`
+	ID              int     `json:"id"`
+	DrugA           string  `json:"DrugA"`
+	DrugB           string  `json:"DrugB"`
+	DoseA           float64 `json:"DoseA"`
+	DoseB           float64 `json:"DoseB"`
+	Response        float64 `json:"Response"`
+	DSS             float64 `json:"DSS"`
+	Synergy_HSA     float64 `json:"Synergy_HSA"`
+	CellLine        string  `json:"CellLine"`
+	id_combinations int     `json:"id_combinations"`
 }
 
 type combination struct {
@@ -35,7 +35,7 @@ func (p *doses) getDose(db *sql.DB) error {
 func (p *doses) updateDose(db *sql.DB) error {
 	_, err :=
 		db.Exec("UPDATE doses SET DrugA=$1, DrugB=$2, DoseA=$3, DoseB=$4, Response=$5, DSS=$6, Synergy_HSA=$7, CellLine=$8, id_combinations=$9 WHERE id=$10",
-			p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_HSA, p.CellLine,p.id_combinations, p.ID)
+			p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_HSA, p.CellLine, p.id_combinations, p.ID)
 	return err
 }
 
@@ -61,7 +61,7 @@ func getDosesByID(db *sql.DB, id_combinations int) ([]doses, error) {
 		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_HSA, CellLine,id_combinations FROM doses WHERE id_combinations=$1",
 		id_combinations)
 
-	if err !=nil {
+	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
@@ -70,8 +70,7 @@ func getDosesByID(db *sql.DB, id_combinations int) ([]doses, error) {
 
 	for rows.Next() {
 		var p doses
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_HSA, &p.CellLine, &p.id_combinations);
-		err != nil {
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_HSA, &p.CellLine, &p.id_combinations); err != nil {
 			return nil, err
 		}
 		allDosesByID = append(allDosesByID, p)
