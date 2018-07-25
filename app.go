@@ -113,10 +113,10 @@ func (a *App) getDoses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) getDosesByID(w http.ResponseWriter, r *http.Request) {
-	id_combinations, _ := strconv.Atoi(r.FormValue("id"))
+	idCombinations, _ := strconv.Atoi(r.FormValue("id"))
 
 
-	allDosesByID, err := getDosesByID(a.DB, id_combinations)
+	allDosesByID, err := getDosesByID(a.DB, idCombinations)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
