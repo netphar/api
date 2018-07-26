@@ -1,4 +1,8 @@
-// app.go
+//forfimm-todo: https://www.reddit.com/r/golang/comments/7t1ibj/what_is_everyone_doing_for_batch_inserts/ for batch inserts
+// in essence use DB.exec to do COPY call
+
+// else use csv load into shadow table via sqlalchemy in python, clean the cols in-place, and then merge-copy as one transaction with max nrow <5k for one service worker
+
 package main
 
 import (
