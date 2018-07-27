@@ -224,6 +224,9 @@ func (a *App) getCombination(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, p)
 }
 
+//url requests look as follow:
+// http://drugcomb.fimm.fi/combinations?start=10&count=2 atm no more than 10 separate combinations are possible
+
 func (a *App) getCombinations(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
