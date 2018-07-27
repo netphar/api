@@ -110,7 +110,7 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 
 func getDosesByID(db *sql.DB, Blockis int) ([]doses, error) {
 	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine FROM doses WHERE Blockis=$1",
+		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, Blockis FROM doses WHERE Blockis=$1",
 		Blockis)
 
 	if err != nil {
@@ -122,7 +122,7 @@ func getDosesByID(db *sql.DB, Blockis int) ([]doses, error) {
 
 	for rows.Next() {
 		var p doses
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine); err != nil {
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.Blockis); err != nil {
 			return nil, err
 		}
 		allDosesByID = append(allDosesByID, p)
