@@ -108,10 +108,10 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 	return allDoses, nil
 }
 
-func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
+func getDosesByID(db *sql.DB, Blockis int) ([]doses, error) {
 	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine,id_combinations FROM doses WHERE Blockis=$1",
-		idCombinations)
+		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine FROM doses WHERE Blockis=$1",
+		Blockis)
 
 	if err != nil {
 		return nil, err

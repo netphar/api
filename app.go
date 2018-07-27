@@ -128,13 +128,13 @@ func (a *App) getDoses(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) getDosesByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	idCombinations, err := strconv.Atoi(vars["id"])
+	Blockis, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid doses chunk ID")
 		return
 	}
 
-	allDosesByID, err := getDosesByID(a.DB, idCombinations)
+	allDosesByID, err := getDosesByID(a.DB, Blockis)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
