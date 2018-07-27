@@ -5,27 +5,28 @@ import (
 )
 
 type doses struct {
-	ID              int     `json:"id"`
-	DrugA           string  `json:"DrugA"`
-	DrugB           string  `json:"DrugB"`
-	DoseA           float64 `json:"DoseA"`
-	DoseB           float64 `json:"DoseB"`
-	Response        float64 `json:"Response"`
-	DSS             float64 `json:"DSS"`
-	Synergy_Bliss     float64 `json:"Synergy_Bliss"`
-	CellLine        string  `json:"CellLine"`
-	blockids	int     `json:"blockids"`
+	ID              	int     `json:"id"`
+	blockids			int     `json:"blockids"`
+	DrugA           	string  `json:"DrugA"`
+	DrugB           	string  `json:"DrugB"`
+	DoseA           	float64 `json:"DoseA"`
+	DoseB           	float64 `json:"DoseB"`
+	Response        	float64 `json:"Response"`
+	DSS             	float64 `json:"DSS"`
+	Synergy_Bliss     	float64 `json:"Synergy_Bliss"`
+	CellLine        	string  `json:"CellLine"`
+
 }
 
-type combination struct {
-	ID          int     `json:"id"`
-	DrugA       string  `json:"DrugA"`
-	DrugB       string  `json:"DrugB"`
-	CellLine    string  `json:"CellLine"`
-	Source      string  `json:"Source"`
-	DSS         float64 `json:"DSS"`
-	Synergy_Bliss float64 `json:"Synergy_Bliss"`
-	blockids	int 	`json:"blockids"`
+type combination 	struct {
+	ID          	int     `json:"id"`
+	blockids		int 	`json:"blockids"`
+	DrugA       	string  `json:"DrugA"`
+	DrugB       	string  `json:"DrugB"`
+	CellLine    	string  `json:"CellLine"`
+	Source      	string  `json:"Source"`
+	DSS         	float64 `json:"DSS"`
+	Synergy_Bliss 	float64 `json:"Synergy_Bliss"`
 }
 
 //add number of cell lines tested
