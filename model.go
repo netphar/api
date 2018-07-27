@@ -14,7 +14,7 @@ type doses struct {
 	DSS             float64 `json:"DSS"`
 	Synergy_Bliss     float64 `json:"Synergy_Bliss"`
 	CellLine        string  `json:"CellLine"`
-	blockIDs	int     `json:"blockIDs"`
+	blockids	int     `json:"blockids"`
 }
 
 type combination struct {
@@ -25,7 +25,7 @@ type combination struct {
 	Source      string  `json:"Source"`
 	DSS         float64 `json:"DSS"`
 	Synergy_Bliss float64 `json:"Synergy_Bliss"`
-	blockIDs	int 	`json:"blockIDs"`
+	blockids	int 	`json:"blockids"`
 }
 
 //add number of cell lines tested
@@ -55,14 +55,14 @@ type conditions struct {
 }
 
 func (p *doses) getDose(db *sql.DB) error {
-	return db.QueryRow("SELECT DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockIDs FROM doses WHERE id=$1",
-		p.ID).Scan(&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockIDs)
+	return db.QueryRow("SELECT DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockids FROM doses WHERE id=$1",
+		p.ID).Scan(&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockids)
 }
 
 func (p *doses) updateDose(db *sql.DB) error {
 	_, err :=
-		db.Exec("UPDATE doses SET DrugA=$1, DrugB=$2, DoseA=$3, DoseB=$4, Response=$5, DSS=$6, Synergy_Bliss=$7, CellLine=$8, blockIDs=$9 WHERE id=$10",
-			p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_Bliss, p.CellLine, p.blockIDs, p.ID)
+		db.Exec("UPDATE doses SET DrugA=$1, DrugB=$2, DoseA=$3, DoseB=$4, Response=$5, DSS=$6, Synergy_Bliss=$7, CellLine=$8, blockids=$9 WHERE id=$10",
+			p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_Bliss, p.CellLine, p.blockids, p.ID)
 	return err
 }
 
@@ -73,8 +73,8 @@ func (p *doses) deleteDose(db *sql.DB) error {
 
 func (p *doses) createDose(db *sql.DB) error {
 	err := db.QueryRow(
-		"INSERT INTO doses(DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockIDs) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id",
-		p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_Bliss, p.CellLine, p.blockIDs).Scan(&p.ID)
+		"INSERT INTO doses(DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockids) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id",
+		p.DrugA, p.DrugB, p.DoseA, p.DoseB, p.Response, p.DSS, p.Synergy_Bliss, p.CellLine, p.blockids).Scan(&p.ID)
 
 	if err != nil {
 		return err
@@ -85,7 +85,7 @@ func (p *doses) createDose(db *sql.DB) error {
 
 func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockIDs FROM doses LIMIT $1 OFFSET $2",
+		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, blockids FROM doses LIMIT $1 OFFSET $2",
 		count, start)
 
 	if err != nil {
@@ -98,7 +98,7 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 
 	for rows.Next() {
 		var p doses
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockIDs); err != nil {
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockids); err != nil {
 			return nil, err
 		}
 		allDoses = append(allDoses, p)
@@ -108,7 +108,7 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 
 func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
 	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine,id_combinations FROM doses WHERE blockIDs=$1",
+		"SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine,id_combinations FROM doses WHERE blockids=$1",
 		idCombinations)
 
 	if err != nil {
@@ -120,7 +120,7 @@ func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
 
 	for rows.Next() {
 		var p doses
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockIDs); err != nil {
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.blockids); err != nil {
 			return nil, err
 		}
 		allDosesByID = append(allDosesByID, p)
@@ -129,7 +129,7 @@ func getDosesByID(db *sql.DB, idCombinations int) ([]doses, error) {
 }
 
 func (p *combination) getCombination(db *sql.DB) error {
-	return db.QueryRow("SELECT DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockIDs FROM combination WHERE id=$1", p.ID).Scan(&p.DrugA, &p.DrugB, &p.CellLine, &p.Source, &p.DSS, &p.Synergy_Bliss, &p.blockIDs)
+	return db.QueryRow("SELECT DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockids FROM combination WHERE id=$1", p.ID).Scan(&p.DrugA, &p.DrugB, &p.CellLine, &p.Source, &p.DSS, &p.Synergy_Bliss, &p.blockids)
 }
 
 func (p *combination) updateCombination(db *sql.DB) error {
@@ -143,7 +143,7 @@ func (p *combination) deleteCombination(db *sql.DB) error {
 }
 
 func (p *combination) createCombination(db *sql.DB) error {
-	err := db.QueryRow("INSERT INTO combination(DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockIDs) VALUES($1, $2, $3, $4, $5, $6) RETURNING id", p.DrugA, p.DrugB, p.CellLine, p.Source, p.DSS, p.Synergy_Bliss, p.blockIDs).Scan(&p.ID)
+	err := db.QueryRow("INSERT INTO combination(DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockids) VALUES($1, $2, $3, $4, $5, $6) RETURNING id", p.DrugA, p.DrugB, p.CellLine, p.Source, p.DSS, p.Synergy_Bliss, p.blockids).Scan(&p.ID)
 
 	if err != nil {
 		return err
@@ -153,7 +153,7 @@ func (p *combination) createCombination(db *sql.DB) error {
 
 func getCombinations(db *sql.DB, start, count int) ([]combination, error) {
 	rows, err := db.Query(
-		"SELECT ID, DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockIDs FROM combination LIMIT $1 OFFSET $2",
+		"SELECT ID, DrugA, DrugB, CellLine, Source, DSS, Synergy_Bliss, blockids FROM combination LIMIT $1 OFFSET $2",
 		count, start)
 
 	if err != nil {
@@ -166,7 +166,7 @@ func getCombinations(db *sql.DB, start, count int) ([]combination, error) {
 
 	for rows.Next() {
 		var p combination
-		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.CellLine, &p.Source, &p.DSS, &p.Synergy_Bliss,&p.blockIDs); err != nil {
+		if err := rows.Scan(&p.ID, &p.DrugA, &p.DrugB, &p.CellLine, &p.Source, &p.DSS, &p.Synergy_Bliss,&p.blockids); err != nil {
 			return nil, err
 		}
 		allCombinations = append(allCombinations, p)
