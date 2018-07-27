@@ -40,26 +40,26 @@ func (a *App) Initialize(user, password, dbname string) {
 func (a *App) initializeRoutes() {
 
 	//all GET
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.getDose).Methods("GET")
-	a.Router.HandleFunc("/doses", a.getDoses).Methods("GET")
-	a.Router.HandleFunc("/doses/{id:[0-9]+}", a.getDosesByID).Methods("GET")
-	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
-	a.Router.HandleFunc("/combinations", a.getCombinations).Methods("GET")
-	a.Router.HandleFunc("/healthcheck", a.healthCheck).Methods("GET")
-	a.Router.HandleFunc("/conditions", a.getConditions).Methods("GET")
+	a.Router.HandleFunc("/api/dose/{id:[0-9]+}", a.getDose).Methods("GET")
+	a.Router.HandleFunc("/api/doses", a.getDoses).Methods("GET")
+	a.Router.HandleFunc("/api/doses/{id:[0-9]+}", a.getDosesByID).Methods("GET")
+	a.Router.HandleFunc("/api/combination/{id:[0-9]+}", a.getCombination).Methods("GET")
+	a.Router.HandleFunc("/api/combinations", a.getCombinations).Methods("GET")
+	a.Router.HandleFunc("/api/healthcheck", a.healthCheck).Methods("GET")
+	a.Router.HandleFunc("/api/conditions", a.getConditions).Methods("GET")
 
 
 	//all POST
-	a.Router.HandleFunc("/dose", a.createDose).Methods("POST")
-	a.Router.HandleFunc("/combination", a.createCombination).Methods("POST")
+	a.Router.HandleFunc("/api/dose", a.createDose).Methods("POST")
+	a.Router.HandleFunc("/api/combination", a.createCombination).Methods("POST")
 
 	//all GET
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.deleteDose).Methods("DELETE")
-	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
+	a.Router.HandleFunc("/api/dose/{id:[0-9]+}", a.deleteDose).Methods("DELETE")
+	a.Router.HandleFunc("/api/combination/{id:[0-9]+}", a.deleteCombination).Methods("DELETE")
 
 	//all PUT
-	a.Router.HandleFunc("/combination/{id:[0-9]+}", a.updateCombination).Methods("PUT")
-	a.Router.HandleFunc("/dose/{id:[0-9]+}", a.updateDose).Methods("PUT")
+	a.Router.HandleFunc("/api/combination/{id:[0-9]+}", a.updateCombination).Methods("PUT")
+	a.Router.HandleFunc("/api/dose/{id:[0-9]+}", a.updateDose).Methods("PUT")
 }
 
 func (a *App) Run(addr string) {
