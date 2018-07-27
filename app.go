@@ -92,7 +92,7 @@ func (a *App) getDose(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p := doses{ID: id}
+	p := doses{Blockis: id}
 	if err := p.getDose(a.DB); err != nil {
 		switch err {
 		case sql.ErrNoRows:

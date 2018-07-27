@@ -57,8 +57,8 @@ type conditions struct {
 }
 
 func (p *doses) getDose(db *sql.DB) error {
-	return db.QueryRow("SELECT DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine, Blockis FROM doses WHERE id=$1",
-		p.ID).Scan(&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine, &p.Blockis)
+	return db.QueryRow("SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine FROM doses WHERE Blockis=$1",
+		p.Blockis).Scan(&p.ID,&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine)
 }
 
 func (p *doses) updateDose(db *sql.DB) error {
