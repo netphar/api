@@ -278,7 +278,7 @@ func (a *App) getDrugs(w http.ResponseWriter, r *http.Request) {
 		start = 0
 	}
 
-	allDrugs, err := getCells(a.DB, start, count)
+	allDrugs, err := getDrugs(a.DB, start, count)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return

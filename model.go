@@ -66,7 +66,7 @@ type cells struct {
 
 type drugs struct {
 	drug_id				int 	`json:"id"`
-	drug_name			string	`json:"drug_name"'`
+	drug_name			string	`json:"drug_name"`
 }
 
 func (p *doses) getDose(db *sql.DB) error {
