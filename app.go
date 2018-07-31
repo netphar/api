@@ -251,8 +251,8 @@ func (a *App) getCells(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
 
-	if count > 1000 || count < 1 {
-		count = 1000
+	if count > 100 || count < 1 {
+		count = 100
 	}
 	if start < 0 {
 		start = 0
@@ -271,8 +271,8 @@ func (a *App) getDrugs(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
 
-	if count > 1000 || count < 1 {
-		count = 1000
+	if count > 100 || count < 1 {
+		count = 100
 	}
 	if start < 0 {
 		start = 0
