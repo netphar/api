@@ -57,16 +57,16 @@ type conditions struct {
 }
 
 type cells struct {
-	cell_id          	int     `json:"id"`
-	accession_id		sql.NullString	`json:"accession_id"`
-	cell_name			string	`json:"cell_name"`
-	tissue_id			int 	`json:"tissue_id"`
+	cell_id          	int     `json:"Id"`
+	accession_id		sql.NullString	`json:"AccessionId"`
+	cell_name			string	`json:"CellName"`
+	tissue_id			int 	`json:"TissueId"`
 
 }
 
 type drugs struct {
-	drug_id				int 	`json:"id"`
-	drug_name			string	`json:"drug_name"`
+	drug_id				int 	`json:"Id"`
+	drug_name			string	`json:"DrugName"`
 }
 
 func (p *doses) getDose(db *sql.DB) error {
