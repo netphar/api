@@ -10,4 +10,4 @@
 * combination by ID `api.drugcomb.fimm.fi/combination/{id:[0-9]}`
 * healthcheck to test whether API is live `api.drugcomb.fimm.fi/healthcheck`
 
-## POST and PUT requests used to create/update/delete new entries are not disclosed publicly, please contact: for more details
+## POST and PUT requests used to create/update/delete new entries are not disclosed publicly, please contact repo owner for more details
