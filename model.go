@@ -60,7 +60,7 @@ type cells struct {
 	Cell_id          	int     `json:"Id"`
 	Accession_id		sql.NullString	`json:"AccessionId"`
 	Cell_name			string	`json:"CellName"`
-	tissue_id			int 	`json:"TissueId"`
+	Tissue_id			int 	`json:"TissueId"`
 
 }
 
