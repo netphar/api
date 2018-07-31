@@ -50,8 +50,6 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/drugs", a.getDrugs).Methods("GET")
 	a.Router.HandleFunc("/cells", a.getCells).Methods("GET")
 
-
-
 	//all POST
 	a.Router.HandleFunc("/dose", a.createDose).Methods("POST")
 	a.Router.HandleFunc("/combination", a.createCombination).Methods("POST")
@@ -251,8 +249,8 @@ func (a *App) getCells(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
 
-	if count > 100 || count < 1 {
-		count = 100
+	if count > 10000 || count < 1 {
+		count = 10000
 	}
 	if start < 0 {
 		start = 0
@@ -271,8 +269,8 @@ func (a *App) getDrugs(w http.ResponseWriter, r *http.Request) {
 	count, _ := strconv.Atoi(r.FormValue("count"))
 	start, _ := strconv.Atoi(r.FormValue("start"))
 
-	if count > 100 || count < 1 {
-		count = 100
+	if count > 10000 || count < 1 {
+		count = 10000
 	}
 	if start < 0 {
 		start = 0
@@ -286,7 +284,6 @@ func (a *App) getDrugs(w http.ResponseWriter, r *http.Request) {
 
 	respondWithJSON(w, http.StatusOK, allDrugs)
 }
-
 
 func (a *App) createCombination(w http.ResponseWriter, r *http.Request) {
 	var p combination
