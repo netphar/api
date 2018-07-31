@@ -58,7 +58,7 @@ type conditions struct {
 
 type cells struct {
 	cell_id          	int     `json:"id"`
-	accession_id		string	`json:"accession_id"`
+	accession_id		sql.NullString	`json:"accession_id"`
 	cell_name			string	`json:"cell_name"`
 	tissue_id			int 	`json:"tissue_id"`
 
