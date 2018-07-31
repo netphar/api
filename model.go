@@ -56,6 +56,19 @@ type conditions struct {
 
 }
 
+type cells struct {
+	cell_id          	int     `json:"id"`
+	accession_id		string	`json:"accession_id"`
+	cell_name			string	`json:"cell_name"`
+	tissue_id			int 	`json:"tissue_id"`
+
+}
+
+type drugs struct {
+	drug_id				int 	`json:"id"`
+	drug_name			string	`json:"drug_name"'`
+}
+
 func (p *doses) getDose(db *sql.DB) error {
 	return db.QueryRow("SELECT ID, DrugA, DrugB, DoseA, DoseB, Response, DSS, Synergy_Bliss, CellLine FROM doses WHERE Blockis=$1",
 		p.Blockis).Scan(&p.ID,&p.DrugA, &p.DrugB, &p.DoseA, &p.DoseB, &p.Response, &p.DSS, &p.Synergy_Bliss, &p.CellLine)
@@ -106,6 +119,52 @@ func getDoses(db *sql.DB, start, count int) ([]doses, error) {
 		allDoses = append(allDoses, p)
 	}
 	return allDoses, nil
+}
+
+func getCells(db *sql.DB, start, count int) ([]cells, error) {
+	rows, err := db.Query(
+		"SELECT cell_id, accession_id, cell_name, tissue_id FROM cells LIMIT $1 OFFSET $2",
+		count, start)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	allCells := []cells{}
+
+	for rows.Next() {
+		var p cells
+		if err := rows.Scan(&p.cell_id, &p.accession_id, &p.cell_name, &p.tissue_id); err != nil {
+			return nil, err
+		}
+		allCells = append(allCells, p)
+	}
+	return allCells, nil
+}
+
+func getDrugs(db *sql.DB, start, count int) ([]drugs, error) {
+	rows, err := db.Query(
+		"SELECT drug_id, drug_name FROM drugs LIMIT $1 OFFSET $2",
+		count, start)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	allDrugs := []drugs{}
+
+	for rows.Next() {
+		var p drugs
+		if err := rows.Scan(&p.drug_id, &p.drug_name); err != nil {
+			return nil, err
+		}
+		allDrugs = append(allDrugs, p)
+	}
+	return allDrugs, nil
 }
 
 func getDosesByID(db *sql.DB, Blockis int) ([]doses, error) {

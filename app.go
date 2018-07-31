@@ -47,6 +47,9 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/combinations", a.getCombinations).Methods("GET")
 	a.Router.HandleFunc("/healthcheck", a.healthCheck).Methods("GET")
 	a.Router.HandleFunc("/conditions", a.getConditions).Methods("GET")
+	a.Router.HandleFunc("/drugs", a.getDrugs).Methods("GET")
+	a.Router.HandleFunc("/cells", a.getCells).Methods("GET")
+
 
 
 	//all POST
@@ -243,6 +246,47 @@ func (a *App) getCombinations(w http.ResponseWriter, r *http.Request) {
 
 	respondWithJSON(w, http.StatusOK, allCombinations)
 }
+
+func (a *App) getCells(w http.ResponseWriter, r *http.Request) {
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+
+	if count > 1000 || count < 1 {
+		count = 1000
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	allCells, err := getCells(a.DB, start, count)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, allCells)
+}
+
+func (a *App) getDrugs(w http.ResponseWriter, r *http.Request) {
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+
+	if count > 1000 || count < 1 {
+		count = 1000
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	allDrugs, err := getCells(a.DB, start, count)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, allDrugs)
+}
+
 
 func (a *App) createCombination(w http.ResponseWriter, r *http.Request) {
 	var p combination
